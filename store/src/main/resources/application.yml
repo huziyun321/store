@@ -7,3 +7,6 @@ spring:
     password: Hzy321
 server:
   port: 8085
+mybatis:
+  mapper-locations: classpath:com/huziyun/mapper/*.xml
+  type-aliases-package: com.huziyun.store.entity
