@@ -143,5 +143,29 @@
 			</div>
 		</footer>
 		<!--页脚结束-->
+	<script type="text/javascript">
+		$("#btn-login").click(function () {
+			$.ajax({
+				url:"/users/login",
+				type:"POST",
+				data:$("#form-login").serialize(),
+				dataType:"JSON",
+				success:function (json) {
+					if(json.state == 200){
+						alert("登录成功");
+						location.href = "index.html"
+					}else if (json.state == 5001){
+						alert("用户不存在");
+					}else if (json.state == 5002){
+						alert("密码错误")
+					}
+				},
+				error:function (xhr) {
+					alert("登录产生异常" + xhr.message);
+				}
+			})
+			
+		})
+	</script>
 	</body>
 </html>

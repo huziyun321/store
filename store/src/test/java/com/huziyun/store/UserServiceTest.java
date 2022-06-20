@@ -19,13 +19,26 @@ public class UserServiceTest extends BasicTests {
     public void testinsertservice(){
         try {
             User user = new User();
-            user.setUsername("duanzhilan12");
+            user.setUsername("duanzhilan123");
             user.setPassword("123");
             iUserService.insert(user);
             System.out.println("ok");
         } catch (ServiceException e) {
             System.out.println(e.getClass().getSimpleName());
             System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void testloginservice(){
+        try {
+            User user = new User();
+            user.setUsername("duanzhilan123");
+            user.setPassword("123");
+            iUserService.login(user.getUsername(), user.getPassword());
+            System.out.println("ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getClass().getSimpleName());
         }
     }
 }

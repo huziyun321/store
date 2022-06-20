@@ -54,4 +54,5 @@ public class JsonResult<E> implements Serializable {
         this.state = state;
         this.message = message;
     }
+
 }

@@ -4,6 +4,8 @@ import com.huziyun.store.dao.UserDao;
 import com.huziyun.store.entity.User;
 import com.huziyun.store.service.IUserService;
 import com.huziyun.store.service.ex.InsertException;
+import com.huziyun.store.service.ex.PasswordNotMatchException;
+import com.huziyun.store.service.ex.UserNotFoundException;
 import com.huziyun.store.service.ex.UsernameDuplicatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,31 @@ public class UserServiceImpl implements IUserService {
             password = DigestUtils.md5DigestAsHex((salt+password+salt).getBytes()).toUpperCase();
         }
      return password;
+    }
+
+    @Override
+    public User login(String username, String password) {
+        User result = userDao.findByUsername(username);
+        if(result == null ){
+            throw new UserNotFoundException("用户数据不存在");
+        }
+        String oldpassword = result.getPassword();
+        String salt = result.getSalt();
+        String newMd5Password = getMD5Password(password,salt);
+        if(!newMd5Password.equals(oldpassword)){
+            throw new PasswordNotMatchException("用户密码错误");
+        }
+        if(result.getIsDelete() == 1){
+            throw new UserNotFoundException("用户数据不存在");
+        }
+        //减少数据传输，提升系统性能
+        User user = new User();
+        user.setUid(result.getUid());
+        user.setUsername(result.getUsername());
+        user.setAvatar(result.getAvatar());
+
+        //将当前的用户数据返回，返回的数据是为了辅助其他页面做数据展示使用
+        return user;
+
     }
 }

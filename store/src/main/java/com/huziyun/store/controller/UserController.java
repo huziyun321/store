@@ -2,15 +2,10 @@ package com.huziyun.store.controller;
 
 import com.huziyun.store.entity.User;
 import com.huziyun.store.service.IUserService;
-import com.huziyun.store.service.ex.InsertException;
-import com.huziyun.store.service.ex.UsernameDuplicatedException;
 import com.huziyun.store.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.jws.soap.SOAPBinding;
 
 @RestController
 @RequestMapping("users")
@@ -39,9 +34,12 @@ public class UserController extends BaseController {
     @RequestMapping("insert")
     public JsonResult<Void> insert(User user){
         iUserService.insert(user);
-        return new JsonResult<>(ok,ck);
-
+        return new JsonResult<>(ok);
     }
 
-
+    @RequestMapping("login")
+    public JsonResult<User> login(String username, String password){
+        User login = iUserService.login(username, password);
+        return new JsonResult<User>(ok,login);
+    }
 }
