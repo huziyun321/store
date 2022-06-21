@@ -3,10 +3,7 @@ package com.huziyun.store.service.impl;
 import com.huziyun.store.dao.UserDao;
 import com.huziyun.store.entity.User;
 import com.huziyun.store.service.IUserService;
-import com.huziyun.store.service.ex.InsertException;
-import com.huziyun.store.service.ex.PasswordNotMatchException;
-import com.huziyun.store.service.ex.UserNotFoundException;
-import com.huziyun.store.service.ex.UsernameDuplicatedException;
+import com.huziyun.store.service.ex.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -84,6 +81,25 @@ public class UserServiceImpl implements IUserService {
 
         //将当前的用户数据返回，返回的数据是为了辅助其他页面做数据展示使用
         return user;
-
     }
+
+    @Override
+    public void changePassword(Integer uid, String username, String oldPassword, String newPassword) {
+        User byUid = userDao.findByUid(uid);
+        if(byUid == null || byUid.getIsDelete() == 1 ){
+            throw new UserNotFoundException("用户不存在");
+        }
+        String md5Password = getMD5Password(oldPassword, byUid.getSalt());
+        if(!byUid.getPassword().equals(md5Password)){
+            throw new PasswordNotMatchException("密码错误");
+        }
+        String md5Password1 = getMD5Password(newPassword, byUid.getSalt());
+        Integer integer = userDao.updatePasswordByUid(uid, md5Password1, username, new Date());
+        if(integer != 1){
+            throw new UpdateException("更新数据产生未知的异常");
+        }
+    }
+
+
+
 }

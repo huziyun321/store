@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("users")
 public class UserController extends BaseController {
@@ -38,8 +40,21 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping("login")
-    public JsonResult<User> login(String username, String password){
+    public JsonResult<User> login(String username, String password, HttpSession session){
         User login = iUserService.login(username, password);
+        session.setAttribute("uid",login.getUid());
+        session.setAttribute("username",login.getUsername());
         return new JsonResult<User>(ok,login);
+
+    }
+
+    @RequestMapping("changePassword")
+    public JsonResult<Void> changePassword(String oldPassword,String newPassword,HttpSession session){
+        Integer uid = getuidFromSession(session);
+        String username = getUsernameFromSession(session);
+        iUserService.changePassword(uid,username,oldPassword,newPassword);
+        return new JsonResult<>(ok);
+
+
     }
 }

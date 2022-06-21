@@ -41,4 +41,8 @@ public class UserServiceTest extends BasicTests {
             System.out.println(e.getClass().getSimpleName());
         }
     }
+    @Test
+    public void testchangePassword(){
+            iUserService.changePassword(10,"huziyun","123","321");
+    }
 }

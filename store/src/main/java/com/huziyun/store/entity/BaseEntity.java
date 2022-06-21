@@ -2,6 +2,8 @@ package com.huziyun.store.entity;
 
 //实体类的基类
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.crypto.Data;
 import java.io.Serializable;
 import java.util.Date;
@@ -78,4 +80,7 @@ public class BaseEntity implements Serializable {
         result = 31 * result + (getModifiedTime() != null ? getModifiedTime().hashCode() : 0);
         return result;
     }
+
+
+
 }

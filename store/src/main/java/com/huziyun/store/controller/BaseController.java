@@ -4,6 +4,7 @@ import com.huziyun.store.service.ex.*;
 import com.huziyun.store.util.JsonResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.servlet.http.HttpSession;
 import java.rmi.server.ServerCloneException;
 
 public class BaseController {
@@ -26,8 +27,18 @@ public class BaseController {
         }else if (e instanceof InsertException){
             result.setState(5000);
             result.setMessage("注册时产生未知异常");
+        }else if (e instanceof UpdateException){
+            result.setState(5003);
+            result.setMessage("更新时数据异常");
         }
         return result;
+    }
+    protected final Integer getuidFromSession(HttpSession session){
+        return Integer.valueOf(session.getAttribute("uid").toString());
+    }
+
+    protected final String getUsernameFromSession(HttpSession session){
+        return session.getAttribute("username").toString();
     }
 
 
