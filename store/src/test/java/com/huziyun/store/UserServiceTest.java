@@ -19,7 +19,7 @@ public class UserServiceTest extends BasicTests {
     public void testinsertservice(){
         try {
             User user = new User();
-            user.setUsername("duanzhilan123");
+            user.setUsername("duanzhilan1233");
             user.setPassword("123");
             iUserService.insert(user);
             System.out.println("ok");
@@ -45,4 +45,9 @@ public class UserServiceTest extends BasicTests {
     public void testchangePassword(){
             iUserService.changePassword(10,"huziyun","123","321");
     }
+    @Test
+    public void testfinduser(){
+        System.out.println(iUserService.getByUid(11));
+    }
+
 }

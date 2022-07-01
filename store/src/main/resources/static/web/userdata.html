@@ -147,7 +147,7 @@
 							<div class="form-group">
 								<label class="col-md-2 control-label">电话号码：</label>
 								<div class="col-md-8">
-									<input `id="phone" name="phone" type="text" class="form-control" placeholder="请输入电话号码" value="13311311313">
+									<input id="phone" name="phone" type="text" class="form-control" placeholder="请输入电话号码" value="13311311313">
 								</div>
 							</div>
 							<div class="form-group">
@@ -262,6 +262,52 @@
 			</div>
 		</footer>
 		<!--页脚结束-->
+			<script type="text/javascript">
+				$(document).ready(function () {
+					$.ajax({
+						url:"/users/getByUid",
+						type:"GET",
+						data:$("#form-change-info").serialize(),
+						dataType:"json",
+						success:function (json){
+							if(json.state == 200){
+								$("#username").val(json.data.username);
+								$("#phone").val(json.data.phone);
+								$("#email").val(json.data.email);
+								let radio = json.data.gender == 0 ?$("#gender-female") : $("#gender-male");
+								radio.prop("checked","checked");
+							}else {
+								alert("资料修改失败");
+							}
+						},
+						error:function (xhr){
+							alert("修改资料时产生未知的错误" + xhr.status);
+						}
+				});
+				});
+				$("#btn-change-info").click(function () {
+					$.ajax({
+						url:"/users/changeInfo",
+						type:"POST",
+						data:$("#form-change-info").serialize(),
+						dataType:"json",
+						success:function (json){
+							if(json.state == 200){
+								alert("资料修改成功");
+								location.href = "/web/login.html"
+							}else if(json.state == 5003) {
+								alert("数据更新时异常");
+							}else {
+								alert("数据更新失败")
+							}
+						},
+						error:function (xhr){
+							alert("资料修改时时产生未知的错误" + xhr.status);
+						}
+					});
+				});
+			</script>
+
 	</body>
 
 </html>

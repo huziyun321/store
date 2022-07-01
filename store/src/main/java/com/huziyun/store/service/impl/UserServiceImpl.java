@@ -100,6 +100,50 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    @Override
+    public User getByUid(Integer uid) {
+        User byUid = userDao.findByUid(uid);
+        if(byUid == null || byUid.getIsDelete() == 1){
+            throw new UserNotFoundException("用户数据不存在");
+        }
+        User user = new User();
+        user.setUsername(byUid.getUsername());
+        user.setPhone(byUid.getPhone());
+        user.setEmail(byUid.getEmail());
+        user.setGender(byUid.getGender());
+
+        return user;
+    }
+
+    @Override
+    public void changeInfo(User user, Integer uid, String name) {
+        User byUid = userDao.findByUid(uid);
+        if(byUid == null || byUid.getIsDelete() == 1){
+            throw new UserNotFoundException("用户数据不存在");
+        }
+        user.setUid(uid);
+        user.setModifiedUser(name);
+        user.setModifiedTime(new Date());
+
+        Integer integer = userDao.updateInfoByUid(user);
+                if(integer != 1){
+                   throw new UpdateException("更新时数据异常");
+               }
+
+    }
+
+    @Override
+    public void changeAvatar(Integer uid, String avatar, String username) {
+        User byUid = userDao.findByUid(uid);
+        if(byUid == null || byUid.getIsDelete() == 1){
+            throw new UserNotFoundException("用户数据不存在");
+        }
+        Integer rows = userDao.updateAvatarByUid(uid, avatar, username, new Date());
+            if(rows != 1){
+                throw new UpdateException("更新用户头像时产生的异常");
+            }
+
+    }
 
 
 }

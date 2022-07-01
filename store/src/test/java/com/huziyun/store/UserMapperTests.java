@@ -43,4 +43,9 @@ public class UserMapperTests extends BasicTests {
         System.out.println(huziyun);
     }
 
+    @Test
+    public void testupdateAvatarByUid(){
+        userdao.updateAvatarByUid(6,"motherfucker","管理员",new Date());
+    }
+
 }

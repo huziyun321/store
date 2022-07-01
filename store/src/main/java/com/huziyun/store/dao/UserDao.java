@@ -12,5 +12,7 @@ public interface UserDao {
      User findByUsername(String username);
      Integer updatePasswordByUid(Integer uid, String password, String modifiedUser, Date modifiedTime);
      User findByUid(Integer uid);
+     Integer updateInfoByUid(User user);
+     Integer updateAvatarByUid(Integer uid,String avatar,String modifiedUser,Date modifiedTime);
 
 }

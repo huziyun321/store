@@ -1,5 +1,6 @@
 package com.huziyun.store.controller;
 
+import com.huziyun.store.controller.ex.*;
 import com.huziyun.store.service.ex.*;
 import com.huziyun.store.util.JsonResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +13,7 @@ public class BaseController {
 
 
 
-    @ExceptionHandler(ServiceException.class)
+    @ExceptionHandler({ServiceException.class,FileUploadException.class})
     public JsonResult<Void> handleException(Throwable e){
         JsonResult<Void> result = new JsonResult<>(e);
         if(e instanceof UsernameDuplicatedException){
@@ -30,6 +31,21 @@ public class BaseController {
         }else if (e instanceof UpdateException){
             result.setState(5003);
             result.setMessage("更新时数据异常");
+        }else if (e instanceof FileEmptyException){
+            result.setState(6000);
+            result.setMessage("空文件数据异常");
+        }else if (e instanceof FileSizeException){
+            result.setState(6001);
+            result.setMessage("文件大小数据异常");
+        }else if (e instanceof FileTypeException){
+            result.setState(6002);
+            result.setMessage("文件类型数据异常");
+        }else if (e instanceof FileStateException){
+            result.setState(6003);
+            result.setMessage("文件状态数据异常");
+        }else if (e instanceof FileUploadIoException){
+            result.setState(6004);
+            result.setMessage("文件IO流数据异常");
         }
         return result;
     }
